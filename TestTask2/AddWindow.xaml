@@ -1,0 +1,18 @@
+﻿<Window x:Class="TestTask2.AddWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TestTask2"
+        mc:Ignorable="d"
+        Title="AddWindow" Height="450" Width="800">
+    <Grid>
+        <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Name:" VerticalAlignment="Top"/>
+        <TextBox Name="NameBox" HorizontalAlignment="Left" Height="23" Margin="113,9,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" TextChanged="NameTextBoxTextChanged"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,55,0,0" TextWrapping="Wrap" Text="ValueType: " VerticalAlignment="Top"/>
+        <Button Name="AddButton" IsEnabled="False" Content="Add" HorizontalAlignment="Left" Margin="269,9,0,0" VerticalAlignment="Top" Width="75" Height="68" Click="Button_Click"/>
+        <Button Content="Cancel" HorizontalAlignment="Left" Margin="359,9,0,0" VerticalAlignment="Top" Width="75" Height="68"/>
+        <ListBox Name="TypeBox" IsEnabled="False" HorizontalAlignment="Left" Height="22" Margin="113,55,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="TypeBox_SelectionChanged"/>
+
+    </Grid>
+</Window>

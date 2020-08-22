@@ -1,0 +1,89 @@
+﻿<Window x:Class="TestTask2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TestTask2"
+        Loaded="MainWindow_OnLoaded"
+        Closed="MainWindow_OnClosed"
+        mc:Ignorable="d"
+        Title="Lol" Height="400" Width="525">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <TreeView x:Name ="TagView">
+                <TreeView.Resources>
+                    <Style TargetType="{x:Type local:TagItemModel}">
+                        <Setter Property="HeaderTemplate">
+                            <Setter.Value>
+                                <HierarchicalDataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Width="40" Height="30" Margin="3" 
+                                                Source="{Binding
+                                            RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:TagItemModel}},
+                                            Converter={x:Static local:TagItemModelToImageConverter.Instance}}" />
+                                        <TextBlock Width="60" Margin="5" VerticalAlignment="Center" FontSize="14" Text="{Binding}" >
+                                            <TextBlock.ContextMenu>
+                                                <ContextMenu Name="ContextMenu">
+                                                
+                                                <MenuItem Header="Edit" Click="TagEdit"></MenuItem>
+                                                <MenuItem Header="Add" Click="AddTag"></MenuItem>
+                                                <MenuItem Header="Delete" Click="DeleteTag"></MenuItem>
+                                    
+                                                </ContextMenu>
+                                            </TextBlock.ContextMenu>
+                                        </TextBlock>
+
+                                    </StackPanel>
+                                </HierarchicalDataTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </TreeView.Resources>
+            </TreeView>
+            <StackPanel Grid.Row="1" HorizontalAlignment="Right" Orientation="Horizontal" Margin="5,2,5,10">
+                <Button Content="Load tags" Click="LoadFileButtonClick" Width="60" Height="60" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                </Button>
+                <Button Content="Save tags" Click="SaveFileButtonClick" Width="60" Height="60" HorizontalAlignment="Right" VerticalAlignment="Bottom"></Button>
+                <Label DataContext="{Binding ElementName=TagView, Path=SelectedItem}" Content="{Binding Path=FullPath}"></Label>
+                </StackPanel>
+        </Grid>
+        <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" ResizeBehavior="PreviousAndNext" Height="5"/>
+
+        <Border Grid.Row="2" Padding="7" Margin="7" Background="LightSteelBlue">
+            <Grid  Name="gridTagDetails" DataContext="{Binding ElementName=TagView, Path=SelectedItem}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <TextBlock Margin="7">Имя:</TextBlock>
+                <TextBox Margin="5" Grid.Column="1" Text="{Binding Path=TagName}"></TextBox>
+                <TextBlock Margin="7" Grid.Row="1">Путь:</TextBlock>
+                <TextBox Margin="5" Grid.Row="1" Grid.Column="1" Text="{Binding Path=FullPath}"></TextBox>
+                <TextBlock Margin="7" Grid.Row="2">Тип:</TextBlock>
+                <TextBox Margin="5" Grid.Row="2" Grid.Column="1" Text="{Binding Path=TagType}"></TextBox>
+                <TextBlock Margin="7,7,7,0" Grid.Row="3">Значение:</TextBlock>
+                <TextBox Margin="7" Grid.Row="4" Grid.Column="1" 
+                         Text="{Binding Path=(local:TagItemModel.Value), TargetNullValue=[Значение не предоставлено]}"></TextBox>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
