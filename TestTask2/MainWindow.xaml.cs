@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading;
 using System.Windows;
+using System.Windows.Controls ;
+using System.Windows.Data ;
 using Microsoft.Win32;
 using TestTask1;
 
@@ -24,9 +26,8 @@ namespace TestTask2
 
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            _storage = new TagStorage();
             _storage.TagRoot.AddChild(new TagItem("Dummy",_storage.TagRoot));
-            _storage.CreateDataTree ( _storage?.TagRoot ) ;
+            TagView.ItemsSource = _storage.CreateDataTree();
         }
 
 
@@ -122,12 +123,12 @@ namespace TestTask2
         private void AddTag ( object sender, RoutedEventArgs e )
         {
             var item = (TagItemModel)TagView.SelectedItem;
-            var tag = item.TagParent.FindChild(item.TagName);
+            var tag = item?.TagParent.FindChild(item.TagName);
             AddWindow temp = new AddWindow();
             temp.ShowDialog () ;
             if ( NewTag != null )
             {
-                tag.AddChild(NewTag);
+                tag?.AddChild(NewTag);
                 NewTag = null ;
             }
             UpdateTree();
@@ -142,17 +143,17 @@ namespace TestTask2
             {
                 case MessageBoxResult.Yes :
                     _storage.DeleteByModel(temp);
-                    UpdateTree();
+                      UpdateTree();
                     break ;
                 case MessageBoxResult.No :
                     break ;
                 default :
                     throw new ArgumentOutOfRangeException () ;
             }
-
+               
         }
 
-        private void UpdateTree ( )
+        public  void UpdateTree ( )
         {
             TagView.ItemsSource = _storage.CreateDataTree();
         }

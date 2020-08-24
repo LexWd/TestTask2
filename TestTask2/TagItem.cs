@@ -10,7 +10,14 @@ namespace TestTask1
 {
     public sealed class TagItem : INotifyPropertyChanged
     {
-        private string _name;
+        private string _name ;
+        private string Name
+        {
+            get => _name;
+            set {
+
+                _name = value ; OnPropertyChanged(); } 
+        }
 
         // Since an object can have one of four value types, 
         // it is easier to store the value itself in the string 
@@ -25,7 +32,12 @@ namespace TestTask1
         // Based on this, we can initialize this list here.
         public  List<TagItem> _childs { get ; set ; }
 
-        private string _fullPath;
+        private string _fullPath ;
+        public string FullPath
+        {
+            get => _fullPath;
+            set { _fullPath = value; OnPropertyChanged(); }
+        }
         private uint _level = 1;
 
         #region InterfaceImplementation
@@ -47,8 +59,8 @@ namespace TestTask1
                     break;
                 case "FullPath":
                     ChangeFullPath();
-                    break;
-            }
+                    break ;
+            }  
         }
 
         #endregion
@@ -57,7 +69,7 @@ namespace TestTask1
 
         private void Base(string name, TagItem parent) //Base part of any constructor
         {
-            _name = name;
+            Name = name;
             _parent = parent;
             if (_parent == null) return;
             _level = _parent._level + 1;
@@ -94,6 +106,7 @@ namespace TestTask1
         {
             _value = null;
             _valueType = TagType.None;
+
             Base(name, parent);
         }
 
@@ -110,9 +123,9 @@ namespace TestTask1
         public TagItem(string name, TagItem parent, string tempValue, string valueType,
             string tempFullPath, uint tempLevel)
         {
-            _name = name;
+            Name = name;
             _value = tempValue;
-            _fullPath = tempFullPath;
+            FullPath = tempFullPath;
             _level = tempLevel;
             _childs = new List<TagItem>();
             _parent = parent;
@@ -132,19 +145,19 @@ namespace TestTask1
 
         public TagItem(string name, TagItem parent, TagType type)
         {
-            _name = name;
+            Name = name;
             _parent = parent;
             _parent?.AddChild(this);
             _valueType = type;
             _childs = new List<TagItem>();
-            if (_parent != null) _fullPath = _parent._fullPath + $".{name}";
+            if (_parent != null) FullPath = _parent.FullPath + $".{name}";
             _level = parent.GetLevel() + 1;
             if (_parent != null) _parent.PropertyChanged += ParentOnPropertyChanged;
         }
 
         public TagItem ( string name, string type )
         {
-            _name = name ;
+            Name = name ;
            _valueType = TagItemExtensions.ConvertStringToTagType(type);
         }
 
@@ -179,7 +192,7 @@ namespace TestTask1
         // This method can find child of object by name and return reference to it
         public TagItem FindChild(string name)
         {
-            return _childs.Find(item => item._name == name);
+            return _childs.Find(item => item.Name == name);
         }
 
         public bool HaveChilds()
@@ -286,12 +299,12 @@ namespace TestTask1
 
         public string GetFullPath()
         {
-            return _fullPath;
+            return FullPath;
         }
 
         public string GetName()
         {
-            return _name;
+            return Name;
         }
 
         public TagItem GetParent()
@@ -304,24 +317,18 @@ namespace TestTask1
         // Object name change
         public void ReName(string newName)
         {
-            _name = newName;
+            Name = newName;
             ChangeFullPath();
+            
         }
 
         // Change the full path to the object, taking into account the presence of the parent object
         private void ChangeFullPath()
         {
             if (_parent != null)
-                _fullPath = _parent._fullPath + $".{_name}";
+                FullPath = _parent.FullPath + $".{Name}";
             else
-                _fullPath = $"{_name}";
-            if ( HaveChilds () )
-            {
-                foreach ( var child in _childs )
-                {
-                    child.ChangeFullPath();
-                }
-            }
+                FullPath = $"{Name}";
         }
 
         #endregion
@@ -332,14 +339,14 @@ namespace TestTask1
 
         public void Write()
         {
-            Console.WriteLine($"\n Full path: {_fullPath}\n Level: {_level}\n Value: {_value}\n ValueType: {_valueType}\n");
+            Console.WriteLine($"\n Full path: {FullPath}\n Level: {_level}\n Value: {_value}\n ValueType: {_valueType}\n");
             if (_childs == null || _childs.Count <= 0) return;
             foreach (TagItem child in _childs) child.Write();
         }
 
         #endregion
 
-        public override string ToString() { return $"{_name} "; }
+        public override string ToString() { return $"{Name} "; }
 
         public TagItemModel Transform()
         {

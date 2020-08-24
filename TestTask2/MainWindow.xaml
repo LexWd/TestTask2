@@ -35,15 +35,12 @@
                                         <TextBlock Width="60" Margin="5" VerticalAlignment="Center" FontSize="14" Text="{Binding}" >
                                             <TextBlock.ContextMenu>
                                                 <ContextMenu Name="ContextMenu">
-                                                
-                                                <MenuItem Header="Edit" Click="TagEdit"></MenuItem>
-                                                <MenuItem Header="Add" Click="AddTag"></MenuItem>
-                                                <MenuItem Header="Delete" Click="DeleteTag"></MenuItem>
-                                    
+                                                    <MenuItem Header="Edit" Click="TagEdit"></MenuItem>
+                                                    <MenuItem Header="Add" Click="AddTag"></MenuItem>
+                                                    <MenuItem Header="Delete" Click="DeleteTag"></MenuItem>
                                                 </ContextMenu>
                                             </TextBlock.ContextMenu>
                                         </TextBlock>
-
                                     </StackPanel>
                                 </HierarchicalDataTemplate>
                             </Setter.Value>
@@ -55,8 +52,7 @@
                 <Button Content="Load tags" Click="LoadFileButtonClick" Width="60" Height="60" HorizontalAlignment="Right" VerticalAlignment="Bottom">
                 </Button>
                 <Button Content="Save tags" Click="SaveFileButtonClick" Width="60" Height="60" HorizontalAlignment="Right" VerticalAlignment="Bottom"></Button>
-                <Label DataContext="{Binding ElementName=TagView, Path=SelectedItem}" Content="{Binding Path=FullPath}"></Label>
-                </StackPanel>
+            </StackPanel>
         </Grid>
         <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" ResizeBehavior="PreviousAndNext" Height="5"/>
 
