@@ -1,4 +1,4 @@
-﻿namespace TestTask1
+﻿namespace TestTask2
 {
 	public static class TagItemExtensions
 	{

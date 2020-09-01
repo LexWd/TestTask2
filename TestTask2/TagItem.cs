@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Globalization;
-using System.Runtime.CompilerServices;
-using TestTask2;
+﻿using System ;
+using System.Collections.Generic ;
+using System.ComponentModel ;
+using System.Diagnostics.CodeAnalysis ;
+using System.Globalization ;
+using System.Runtime.CompilerServices ;
 
-namespace TestTask1
+namespace TestTask2
 {
+    [SuppressMessage ( "ReSharper", "SwitchStatementMissingSomeCases" )]
     public sealed class TagItem : INotifyPropertyChanged
     {
         private string _name ;
@@ -30,7 +30,7 @@ namespace TestTask1
 
         // The list of child objects will be empty until we add any object to it.
         // Based on this, we can initialize this list here.
-        public  List<TagItem> _childs { get ; set ; }
+        public  List<TagItem> Childs { get ; set ; }
 
         private string _fullPath ;
         public string FullPath
@@ -59,8 +59,8 @@ namespace TestTask1
                     break;
                 case "FullPath":
                     ChangeFullPath();
-                    break ;
-            }  
+                    break;
+            }
         }
 
         #endregion
@@ -81,7 +81,7 @@ namespace TestTask1
         {
             _value = value.ToString();
             _valueType = TagType.Int;
-            _childs = new List<TagItem>();
+            Childs = new List<TagItem>();
             Base(name, parent);
         }
 
@@ -127,7 +127,7 @@ namespace TestTask1
             _value = tempValue;
             FullPath = tempFullPath;
             _level = tempLevel;
-            _childs = new List<TagItem>();
+            Childs = new List<TagItem>();
             _parent = parent;
 
             try
@@ -149,7 +149,7 @@ namespace TestTask1
             _parent = parent;
             _parent?.AddChild(this);
             _valueType = type;
-            _childs = new List<TagItem>();
+            Childs = new List<TagItem>();
             if (_parent != null) FullPath = _parent.FullPath + $".{name}";
             _level = parent.GetLevel() + 1;
             if (_parent != null) _parent.PropertyChanged += ParentOnPropertyChanged;
@@ -167,11 +167,11 @@ namespace TestTask1
 
         public void AddChild(TagItem newChild)
         {
-            if ( _childs == null )
+            if ( Childs == null )
             {
-                _childs = new List<TagItem> ();
+                Childs = new List<TagItem> ();
             }
-            _childs.Add(newChild);
+            Childs.Add(newChild);
             newChild._parent = this;
             newChild.ChangeFullPath();
          
@@ -180,29 +180,29 @@ namespace TestTask1
         // This method removes a descendant from its copy
         public void DeleteChild(TagItem child)
         {
-            _childs.Remove(child);
+            Childs.Remove(child);
         }
 
         // This method removes a child by name
         public void DeleteChild(string name)
         {
-            _childs.Remove(FindChild(name));
+            Childs.Remove(FindChild(name));
         }
 
         // This method can find child of object by name and return reference to it
         public TagItem FindChild(string name)
         {
-            return _childs.Find(item => item.Name == name);
+            return Childs.Find(item => item.Name == name);
         }
 
         public bool HaveChilds()
         {
-            return _childs?.Count > 0;
+            return Childs?.Count > 0;
         }
 
         public IEnumerable<TagItem> GetChilds()
         {
-            return _childs;
+            return Childs;
         }
 
         #endregion
@@ -339,9 +339,14 @@ namespace TestTask1
 
         public void Write()
         {
-            Console.WriteLine($"\n Full path: {FullPath}\n Level: {_level}\n Value: {_value}\n ValueType: {_valueType}\n");
-            if (_childs == null || _childs.Count <= 0) return;
-            foreach (TagItem child in _childs) child.Write();
+            Console.WriteLine($@"
+ Full path: {FullPath}
+ Level: {_level}
+ Value: {_value}
+ ValueType: {_valueType}
+");
+            if (Childs == null || Childs.Count <= 0) return;
+            foreach (var child in Childs) child.Write();
         }
 
         #endregion

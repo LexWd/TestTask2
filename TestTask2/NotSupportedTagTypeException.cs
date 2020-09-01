@@ -1,8 +1,8 @@
-﻿using System;
+﻿using System ;
 
-namespace TestTask1
+namespace TestTask2
 {
-	class NotSupportedTagTypeException : Exception
+    internal class NotSupportedTagTypeException : Exception
 	{
 		public NotSupportedTagTypeException() { }
 		public NotSupportedTagTypeException(string message) : base(message) { }

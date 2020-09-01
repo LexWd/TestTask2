@@ -1,4 +1,4 @@
-﻿namespace TestTask1
+﻿namespace TestTask2
 {
 	// Due to the existence of the "none" type, 
 	// it is impossible to use a generalized class,

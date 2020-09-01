@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Xml;
-using TestTask2;
+﻿using System ;
+using System.Collections.Generic ;
+using System.Linq ;
+using System.Xml ;
 
-namespace TestTask1
+namespace TestTask2
 {
     public class TagStorage
     {
@@ -22,10 +20,7 @@ namespace TestTask1
         {
             _storage = new XmlDocument();
             _storage.Load(filename);
-            
-
-            bool temp = Write();
-
+            Write();
         }
 
         public void Save(TagItem root, XmlElement parent, string filePath)
@@ -39,89 +34,54 @@ namespace TestTask1
             _storage.Save(filePath);
         }
 
-        private void CreateStructure(TagItem root, XmlElement parent)
+        private void CreateStructure ( TagItem root, XmlNode parent )
         {
-            XmlElement tag = _storage.CreateElement("tag");
-            XmlAttribute nameAttr = _storage.CreateAttribute("name");
-            XmlElement pathAttr = _storage.CreateElement("FullPath");
-            XmlElement levelAttr = _storage.CreateElement("Level");
-            XmlElement valueTypeAttr = _storage.CreateElement("ValueType");
-            XmlElement valueAttr = _storage.CreateElement("Value");
+            var tag           = _storage.CreateElement ( "tag" ) ;
+            var nameAttr      = _storage.CreateAttribute ( "name" ) ;
+            var pathAttr      = _storage.CreateElement ( "FullPath" ) ;
+            var levelAttr     = _storage.CreateElement ( "Level" ) ;
+            var valueTypeAttr = _storage.CreateElement ( "ValueType" ) ;
+            var valueAttr     = _storage.CreateElement ( "Value" ) ;
 
-            XmlText nameText = _storage.CreateTextNode(root.GetName());
-            XmlText pathText = _storage.CreateTextNode(root.GetFullPath());
-            XmlText levelText = _storage.CreateTextNode(root.GetLevel().ToString());
-            XmlText valueTypeText = _storage.CreateTextNode(TagItem.GetTypeOfValue(root));
-            XmlText valueText = _storage.CreateTextNode(root.GetValue().ToString());
+            var nameText      = _storage.CreateTextNode ( root.GetName () ) ;
+            var pathText      = _storage.CreateTextNode ( root.GetFullPath () ) ;
+            var levelText     = _storage.CreateTextNode ( root.GetLevel ().ToString () ) ;
+            var valueTypeText = _storage.CreateTextNode ( TagItem.GetTypeOfValue ( root ) ) ;
+            var valueText     = _storage.CreateTextNode ( root.GetValue ().ToString () ) ;
 
-            nameAttr.AppendChild(nameText);
-            pathAttr.AppendChild(pathText);
-            levelAttr.AppendChild(levelText);
-            valueAttr.AppendChild(valueText);
-            valueTypeAttr.AppendChild(valueTypeText);
-            tag.Attributes.Append(nameAttr);
-            tag.AppendChild(pathAttr);
-            tag.AppendChild(levelAttr);
-            tag.AppendChild(valueAttr);
-            tag.AppendChild(valueTypeAttr);
+            nameAttr.AppendChild ( nameText ) ;
+            pathAttr.AppendChild ( pathText ) ;
+            levelAttr.AppendChild ( levelText ) ;
+            valueAttr.AppendChild ( valueText ) ;
+            valueTypeAttr.AppendChild ( valueTypeText ) ;
+            tag.Attributes.Append ( nameAttr ) ;
+            tag.AppendChild ( pathAttr ) ;
+            tag.AppendChild ( levelAttr ) ;
+            tag.AppendChild ( valueAttr ) ;
+            tag.AppendChild ( valueTypeAttr ) ;
 
-            if (root.HaveChilds())
+            if ( root.HaveChilds () )
             {
-                XmlElement childElement = _storage.CreateElement("Childs");
-                foreach (TagItem child in root.GetChilds()) CreateStructure(child, childElement);
-                tag.AppendChild(childElement);
+                var childElement = _storage.CreateElement ( "Childs" ) ;
+                foreach ( var child in root.GetChilds () ) CreateStructure ( child, childElement ) ;
+                tag.AppendChild ( childElement ) ;
             }
 
-            if (parent != null)
-                parent.AppendChild(tag);
+            if ( parent != null )
+            {
+                parent.AppendChild ( tag ) ;
+            }
             else
-                _storage.AppendChild(tag);
+            {
+                _storage.AppendChild ( tag ) ;
+            }
         }
 
-        private bool Write()
+        private void Write()
         {
             var xRoot = _storage.DocumentElement;
-            if (xRoot == null) return false;
+            if (xRoot == null) return ;
             TagRoot = CreateData(null, null);
-            return TagRoot != null;
-        }
-
-        private static void WriteNodes(IEnumerable xRoot)
-        {
-
-            foreach (XmlNode xNode in xRoot)
-            {
-                if (xNode.Attributes == null || xNode.Attributes.Count <= 0) continue;
-                XmlNode attr = xNode.Attributes.GetNamedItem("name");
-                if (attr != null)
-                    Console.WriteLine(attr.Value);
-                foreach (XmlNode childNode in xNode.ChildNodes)
-                    switch (childNode.Name)
-                    {
-                        case "Level":
-                            Console.WriteLine($"Level: {childNode.InnerText}");
-                            break;
-                        case "FullPath":
-                            Console.WriteLine($"Full Path: {childNode.InnerText}");
-                            break;
-                        case "Value":
-                            Console.WriteLine($"Value: {childNode.InnerText}");
-                            break;
-                        case "ValueType":
-                            Console.WriteLine($"ValueType: {childNode.InnerText}");
-                            break;
-                        case "Childs":
-                            XmlElement node = (XmlElement)childNode;
-                            Console.WriteLine();
-                            WriteNodes(node);
-                            break;
-                        default:
-                            Console.WriteLine("Incorrect parameter");
-                            break;
-                    }
-
-                Console.WriteLine();
-            }
         }
 
 
@@ -132,78 +92,73 @@ namespace TestTask1
                 nodeForItem = _storage.DocumentElement;
                 nodeForItem = nodeForItem?.FirstChild;
             }
-            else if (_tempList2.Contains(nodeForItem)) return null;
-
-            if (nodeForItem?.Attributes == null || (nodeForItem.Name != "tag"))
+            else if (_tempList2.Contains(nodeForItem))
             {
                 return null;
             }
-            else
+
+            if (nodeForItem?.Attributes == null || nodeForItem.Name != "tag")
             {
-                _tempList2.Add(nodeForItem);
-                XmlNode attr = nodeForItem.Attributes.GetNamedItem("name");
-                uint tempLevel = 1;
-                string tempPath = "";
-                string tempName = attr.Value;
-                string tempValue = "";
-                string valueType = "";
-                XmlNode childsNod = null;
-                foreach (XmlNode childNode in nodeForItem.ChildNodes)
-                {
-                    switch (childNode.Name)
-                    {
-
-                        case "Level":
-                            tempLevel = uint.Parse(childNode.InnerText);
-                            break;
-                        case "FullPath":
-                            tempPath = childNode.InnerText;
-                            break;
-                        case "Value":
-                            tempValue = childNode.InnerText;
-                            break;
-                        case "ValueType":
-                            valueType = childNode.InnerText;
-                            break;
-                        case "Childs":
-                            childsNod = childNode;
-                            break;
-                        default:
-                            Console.WriteLine("Incorrect parameter");
-                            break;
-                    }
-                }
-                TagItem newItem = new TagItem(tempName, parentItem, tempValue, valueType, tempPath, tempLevel);
-
-                if (childsNod != null)
-                {
-                    foreach (XmlNode child in childsNod.ChildNodes)
-                    {
-                        TagItem tempItem = CreateData(newItem, child);
-                        if (tempItem != null)
-                        {
-                            newItem.AddChild(tempItem);
-                        }
-                    }
-                }
-
-                return newItem;
+                return null;
             }
+
+            _tempList2.Add(nodeForItem);
+            var     attr      = nodeForItem.Attributes.GetNamedItem("name");
+            uint    tempLevel = 1;
+            var     tempPath  = "";
+            var     tempName  = attr.Value;
+            var     tempValue = "";
+            var     valueType = "";
+            XmlNode childsNod = null;
+            foreach (XmlNode childNode in nodeForItem.ChildNodes)
+                switch (childNode.Name)
+                {
+
+                    case "Level":
+                        tempLevel = uint.Parse(childNode.InnerText);
+                        break;
+                    case "FullPath":
+                        tempPath = childNode.InnerText;
+                        break;
+                    case "Value":
+                        tempValue = childNode.InnerText;
+                        break;
+                    case "ValueType":
+                        valueType = childNode.InnerText;
+                        break;
+                    case "Childs":
+                        childsNod = childNode;
+                        break;
+                    default:
+                        Console.WriteLine(@"Incorrect parameter");
+                        break;
+                }
+            var newItem = new TagItem(tempName, parentItem, tempValue, valueType, tempPath, tempLevel);
+
+            if ( childsNod == null ) return newItem ;
+            foreach (XmlNode child in childsNod.ChildNodes)
+            {
+                var tempItem = CreateData(newItem, child);
+                if (tempItem != null) newItem.AddChild(tempItem);
+            }
+            return newItem;
         }
 
         public TagItem Search(string fullName)
         {
-            TagItem tempItem = TagRoot;
-            string[] split = fullName.Trim().Split('.');
+            var tempItem = TagRoot;
+            var split = fullName.Trim().Split('.');
 
-            return split?.Aggregate(tempItem, (current, name) => current?.FindChild(name));
+            return split.Aggregate(tempItem, (current, name) => current?.FindChild(name));
         }
 
         public TagItem SearchByFullPath ( string fullPath ) {return Search(fullPath.Remove (0,4)); }
 
         public void DeleteByModel(TagItemModel model)
         {
-            DeleteTag(model.TagParent);
+            var temp = model.TagParent ;
+            var tagForDelete = temp.FindChild ( model.TagName ) ;
+            DeleteTag(tagForDelete);
         }
 
         public static void DeleteTag(TagItem tagForDelete)
@@ -214,10 +169,7 @@ namespace TestTask1
 
         public List<TagItemModel> CreateDataTree(TagItem parent = null)
         {
-            if (parent == null)
-            {
-                parent = TagRoot;
-            }
+            if (parent == null) parent = TagRoot;
             var tempList = new List<TagItemModel>();
             if ( !parent.HaveChilds () ) return tempList ;
             tempList.AddRange ( parent.GetChilds ().Select ( node => node.Transform () ) ) ;

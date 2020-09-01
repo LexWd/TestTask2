@@ -1,7 +1,9 @@
-﻿using System;
+﻿using System ;
+using System.Diagnostics.CodeAnalysis ;
 
-namespace TestTask1
+namespace TestTask2
 {
+	[SuppressMessage ( "ReSharper", "SwitchStatementMissingSomeCases" )]
 	public static class ConsoleMenu
 	{
 		public static int Run(string headLine, params string[] paragraphs)
@@ -26,7 +28,7 @@ namespace TestTask1
 				Console.ForegroundColor = ConsoleColor.White;
 				Console.BackgroundColor = ConsoleColor.Black;
 				Console.SetCursorPosition(x, y + oldParagraph);
-				Console.Write(paragraphs[oldParagraph] + " ");
+				Console.Write(paragraphs[oldParagraph] + @" ");
 
 				Console.ForegroundColor = ConsoleColor.Black;
 				Console.BackgroundColor = ConsoleColor.White;
@@ -37,20 +39,20 @@ namespace TestTask1
 
 				var key = Console.ReadKey();
 
-				switch (key.Key)
-				{
-					case ConsoleKey.DownArrow:
-						paragraph++;
-						break;
-					case ConsoleKey.UpArrow:
-						paragraph--;
-						break;
-					case ConsoleKey.Enter:
-						choice = true;
-						break;
-				}
+			    switch ( key.Key )
+			    {
+			        case ConsoleKey.DownArrow :
+			            paragraph++ ;
+			            break ;
+			        case ConsoleKey.UpArrow :
+			            paragraph-- ;
+			            break ;
+			        case ConsoleKey.Enter :
+			            choice = true ;
+			            break ;
+			    }
 
-				if (paragraph >= paragraphs.Length)
+			    if (paragraph >= paragraphs.Length)
 				{
 					paragraph = 0;
 				}

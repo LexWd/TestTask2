@@ -1,19 +1,18 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis ;
 using System.Threading;
 using System.Windows;
-using System.Windows.Controls ;
-using System.Windows.Data ;
 using Microsoft.Win32;
-using TestTask1;
 
 namespace TestTask2
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    [SuppressMessage ( "ReSharper", "SwitchStatementMissingSomeCases" )]
+    public partial class MainWindow
     {
-        private TagStorage _storage;
+        private readonly TagStorage _storage;
         public static string NewName ;
         public static TagItem NewTag ;
         public MainWindow()
@@ -39,7 +38,7 @@ namespace TestTask2
 
         private void LoadFile()
         {
-            Thread thread = new Thread(Start);
+            var thread = new Thread(Start);
             thread.Start();
             thread.Join();
             TagView.ItemsSource = _storage.CreateDataTree();
@@ -47,16 +46,16 @@ namespace TestTask2
 
         private void Start()
         {
-            OpenFileDialog openFile = new OpenFileDialog
+            var openFile = new OpenFileDialog
             {
                 InitialDirectory = "c:\\",
                 Filter = "xml files (*.xml)|*.xml|All files (*.*)|*.*",
                 FilterIndex = 1,
-                RestoreDirectory = false,
+                RestoreDirectory = false
 
             };
             if (openFile.ShowDialog() != true) return;
-            string filePath = openFile.FileName;
+            var filePath = openFile.FileName;
             _storage.Load(filePath);
 
         }
@@ -69,8 +68,8 @@ namespace TestTask2
 
         private void SaveFile()
         {
-            Thread thread = new Thread(Save);  
-            TagItemModel tItemModel = (TagItemModel)TagView.Items[0];
+            var thread = new Thread(Save);  
+            var tItemModel = (TagItemModel)TagView.Items[0];
             _storage.TagRoot = new TagItem("Root");
             _storage.TagRoot.AddChild(tItemModel.Transform());
             thread.Start();
@@ -79,7 +78,7 @@ namespace TestTask2
 
         private void Save()
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog
+            var saveFileDialog = new SaveFileDialog
             {
                 InitialDirectory = "c:\\",
                 Filter = "xml files (*.xml)|*.xml|All files (*.*)|*.*",
@@ -88,24 +87,23 @@ namespace TestTask2
             };
 
             if (saveFileDialog.ShowDialog() != true) return;
-            string filePath = saveFileDialog.FileName;
+            var filePath = saveFileDialog.FileName;
 
             _storage.Save(_storage.TagRoot, null, filePath);
         }
 
         private void MainWindow_OnClosed(object sender, EventArgs e)
         {
-            MessageBoxResult result = MessageBox.Show("Do you want to save?", "Save me", MessageBoxButton.YesNo);
-            switch (result)
+            var result = MessageBox.Show("Do you want to save?", "Save me", MessageBoxButton.YesNo);
+            switch ( result )
             {
-
-                case MessageBoxResult.Yes:
-                    SaveFile();
-                    break;
-                case MessageBoxResult.No:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                case MessageBoxResult.Yes :
+                    SaveFile () ;
+                    break ;
+                case MessageBoxResult.No :
+                    break ;
+                default :
+                    throw new ArgumentOutOfRangeException () ;
             }
         }
 
@@ -114,7 +112,7 @@ namespace TestTask2
             var item = (TagItemModel) TagView.SelectedItem;
             NewName = item.TagName ;
             var tag = item.TagParent.FindChild ( NewName ) ;
-            EditWindow temp = new EditWindow () ;
+            var temp = new EditWindow () ;
             temp.ShowDialog () ;
             tag.ReName(NewName);
             UpdateTree();
@@ -124,7 +122,7 @@ namespace TestTask2
         {
             var item = (TagItemModel)TagView.SelectedItem;
             var tag = item?.TagParent.FindChild(item.TagName);
-            AddWindow temp = new AddWindow();
+            var temp = new AddWindow();
             temp.ShowDialog () ;
             if ( NewTag != null )
             {
@@ -137,12 +135,12 @@ namespace TestTask2
         private void DeleteTag ( object sender, RoutedEventArgs e )
         {
 
-            var temp =(TagItemModel) TagView.SelectedItem ;
+           var temp =(TagItemModel) TagView.SelectedItem ;
            var result = MessageBox.Show ( "You sure that want to delete this?", "Deleting", MessageBoxButton.YesNo ) ;
             switch ( result )
             {
                 case MessageBoxResult.Yes :
-                    _storage.DeleteByModel(temp);
+                     _storage.DeleteByModel(temp);
                       UpdateTree();
                     break ;
                 case MessageBoxResult.No :
@@ -153,7 +151,7 @@ namespace TestTask2
                
         }
 
-        public  void UpdateTree ( )
+        public  void UpdateTree ()
         {
             TagView.ItemsSource = _storage.CreateDataTree();
         }

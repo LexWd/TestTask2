@@ -1,32 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using TestTask1 ;
 
 namespace TestTask2
 {
     /// <summary>
     /// Interaction logic for AddWindow.xaml
     /// </summary>
-    public partial class AddWindow : Window
+    public partial class AddWindow
     {
-        private bool name ;
-        private bool type ;
-        private string [] typeStrings = new [] { "Bool", "Int", "Double", "None" } ;
+        private bool _name ;
+        private readonly string [] _typeStrings = { "Bool", "Int", "Double", "None" } ;
         public AddWindow()
         {
             InitializeComponent();
-            foreach ( var item in typeStrings )
+            foreach ( var item in _typeStrings )
                 {
                     TypeBox.Items.Add ( item ) ;
                 }
@@ -41,8 +28,8 @@ namespace TestTask2
         private void NameTextBoxTextChanged(object sender, TextChangedEventArgs e)
         {
             var temp = ( TextBox ) sender ;
-            name = temp.Text != "" ;
-            if ( name )
+            _name = temp.Text != "" ;
+            if ( _name )
             {
                 TypeBox.IsEnabled = true ;           
             }
@@ -50,9 +37,7 @@ namespace TestTask2
 
         private void TypeBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var temp = (ListBox)sender;
-            type = temp.SelectedItem != null ;
-            if (name)
+            if (_name)
             {
                 AddButton.IsEnabled = true;
             }

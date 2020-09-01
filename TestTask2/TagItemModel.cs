@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel ;
+using System.Diagnostics.CodeAnalysis ;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TestTask1 ;
-using System.Runtime.Serialization;
 using System.Windows.Controls ;
-using System.Windows.Media ;
 
 namespace TestTask2
 {
-[Serializable()]
-    public class TagItemModel:TreeViewItem
+[Serializable]
+[SuppressMessage ( "ReSharper", "SwitchStatementMissingSomeCases" )]
+public class TagItemModel:TreeViewItem
     {
         public string TagName { get ; set ; }
         public string FullPath { get ; set ; }
@@ -35,25 +31,24 @@ namespace TestTask2
             switch (TagType)
             {
                 case "Bool":
-                    Value = tag.GetValue ().ToString () ;
+                    Value = tag.GetValue().ToString();
                     Tag = "Images/Bool.png";
-                    break ;
+                    break;
                 case "Int":
                     Value = tag.GetValue().ToString();
                     Tag = "Images/Integer.png";
-                    break ;
+                    break;
                 case "Double":
                     Value = tag.GetValue().ToString();
                     Tag = "Images/Double.png";
-                    break ;
+                    break;
                 case "None":
                     Value = "";
                     Tag = "Images/None.png";
-                    break ;
-                default:
                     break;
             }
-            if(tag.HaveChilds())
+
+            if ( !tag.HaveChilds () ) return ;
             foreach ( var item in tag.GetChilds() )
             {
                 Items.Add ( item.Transform () ) ;
@@ -78,10 +73,10 @@ namespace TestTask2
         {
             var tagItem = new TagItem(TagName,TagParent,Value,TagType,FullPath,Level);
             var tempList = (from TagItemModel model in Items select model.Transform ()).ToList () ;
-            var childs = tagItem.GetChilds () ;
-            tagItem._childs = tempList ;
+            tagItem.GetChilds () ;
+            tagItem.Childs = tempList ;
             return tagItem ;
-        } 
+        }
 
     }
 }
