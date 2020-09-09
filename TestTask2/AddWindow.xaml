@@ -4,14 +4,20 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="New tag" Height="195" Width="449">
+        Title="New tag" Height="200" Width="450">
     <Grid>
         <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Name:" VerticalAlignment="Top"/>
-        <TextBox Name="NameBox" HorizontalAlignment="Left" Height="23" Margin="113,9,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" TextChanged="NameTextBoxTextChanged"/>
+        <TextBox Name="NameBox" HorizontalAlignment="Left" Height="23" Margin="50,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="150" TextChanged="NameTextBoxTextChanged"/>
         <TextBlock HorizontalAlignment="Left" Margin="10,55,0,0" TextWrapping="Wrap" Text="ValueType: " VerticalAlignment="Top"/>
-        <Button Name="AddButton" IsEnabled="False" Content="Add" HorizontalAlignment="Left" Margin="269,9,0,0" VerticalAlignment="Top" Width="75" Height="144" Click="Button_Click"/>
-        <Button Content="Cancel" HorizontalAlignment="Left" Margin="359,9,0,0" VerticalAlignment="Top" Width="75" Height="144"/>
-        <ListBox Name="TypeBox" IsEnabled="False" HorizontalAlignment="Left" Height="98" Margin="113,55,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="TypeBox_SelectionChanged"/>
-
+        <StackPanel Name="CheckBoxes" HorizontalAlignment="Left" Height="100" Margin="75,54,0,0" VerticalAlignment="Top" Width="125">
+            <CheckBox Name="BoolCheck" Content="Bool" Checked="Check"  IsEnabled="False" Unchecked="Uncheck"/>
+            <CheckBox Name="IntCheck" Content="Integer" Checked="Check" IsEnabled="False" Unchecked="Uncheck"/>
+            <CheckBox Name="DoubleCheck" Content="Double" Checked="Check" IsEnabled="False" Unchecked="Uncheck"/>
+            <CheckBox Name="NoneCheck" Content="None" Checked="Check" IsEnabled="False" Unchecked="Uncheck"/>
+        </StackPanel>
+        <Grid HorizontalAlignment="Left" Height="144" Margin="205,10,0,0" VerticalAlignment="Top" Width="229">
+            <Button Content="Cancel" HorizontalAlignment="Left" Margin="144,0,0,0" VerticalAlignment="Top" Width="75" Height="144" Click="Cancel_Click"/>
+            <Button x:Name="AddButton" IsEnabled="False" Content="Add" HorizontalAlignment="Left" Margin="39,0,0,0" VerticalAlignment="Top" Width="75" Height="144" Click="Add_Click"/>
+        </Grid>
     </Grid>
 </Window>
